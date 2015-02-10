@@ -96,7 +96,7 @@
     </div>
 
     <div class="row">
-        <div class="medium-6 columns">
+        <!-- <div class="medium-6 columns">
             <button href="#" data-dropdown="drop1" aria-controls="drop1" aria-expanded="true" class="button dropdown">Choose team</button><br>
             <ul id="drop1" data-dropdown-content class="f-dropdown" aria-hidden="true" tabindex="-1">
                 <li><a href="#">Broncos</a></li>
@@ -105,23 +105,29 @@
                 <li><a href="#">Avalanche</a></li>
                 <li><a href="#">Rapids</a></li>
             </ul>
+        </div> -->
+
+        <div class="medium-6 columns">
+            <p>
+                Search: <input id="filter" type="text"/>
+                Status:
+                <select class="filter-status">
+                    <option></option>
+                    <option value="adventure">Adventure</option>
+                    <option value="sports">Sports</option>
+                    <option value="religious">Religious</option>
+                    <option value="academic">Academic</option>
+                    <option value="general">General</option>
+                </select>
+                <a href="#clear" class="clear-filter" title="clear filter">[clear]</a>
+                <span class="row-count"></span>
+            </p>
         </div>
-    <div class="medium-6 columns">
-        <p>
-            Search database: <input id="filter" type="text"/>
-            <!-- Sort via dropdown - not working yet -->
-            Status: <select data-filter="category" class="filter-category">
-                <option></option>
-                <option value="adventure">Adventure</option>
-                <option value="sports">Sports</option>
-            </select>
-            <a href="#clear" class="clear-filter" title="clear filter">[clear]</a>
-        </p>
     </div>
-</div>
-<div class="row">
-    <div class="small-12 columns">
-            <table id="seller-table" class="table" data-filter="#filter" data-filter-text-only="true" data-page-size="30">
+    <div class="row">
+        <div class="small-12 columns">
+             <table class="table demo" data-filter="#filter" data-filter-text-only="true">
+             <!-- <table id="seller-table" class="table demo" data-filter="#filter" data-filter-text-only="true" data-page-size="30"> -->
                 <thead>
                     <tr>
                         <th data-toggle="true">Camp</th>
@@ -142,8 +148,7 @@
                 <tbody>                    
                 </tbody>
             </table>
-            
-    </div>
+        </div>
     </div>
 
     <ul class="post-meta-social-links text-center no-bullet" id="sticky-inner">
@@ -284,42 +289,41 @@
         });
 
         $('table').trigger('footable_initialize');
-        /* $(function () {
+         $(function () {
+           $('table').footable({ bookmarkable: { enabled: true }}).bind({
+            'footable_filtering': function (e) {
+                var selected = $('.filter-status').find(':selected').text();
+                if (selected && selected.length > 0) {
+                    e.filter += (e.filter && e.filter.length > 0) ? ' ' + selected : selected;
+                    e.clear = !e.filter;
+                }
+            },
+            'footable_filtered': function() {
+                var count = $('table.demo tbody tr:not(.footable-filtered)').length;
+                $('.row-count').html(count + ' rows found');
+            }
+        });
 
-            $('table').footable();
+        $('.clear-filter').click(function (e) {
+            e.preventDefault();
+            $('.filter-status').val('');
+            $('table.demo').trigger('footable_clear_filter');
+            $('.row-count').html('');
+        });
 
-            $('.clear-filter').click(function (e) {
-                e.preventDefault();
-                $('table.camps').trigger('footable_clear_filter');
-                $('.filter-id').val('');
-            });
-
-            $('.filter-id').change(function (e) {
-                e.preventDefault();
-                var filter = $(this).val();
-                $('#filter').val('');
-                $('table.camps').trigger('footable_filter', {filter: filter});
-            });
-
-            $('.get_data').click(function() {
-                $.ajax({
-                    url : '/some/api',
-                    success : function(data) {
-                        $('table tbody').append(data);
-                        $('table').trigger('footable_redraw');
-                    }
-                });
-            });
-        }); */
-
+        $('.filter-status').change(function (e) {
+            e.preventDefault();
+            $('table.demo').data('footable-filter').filter( $('#filter').val() );
+        });
+    });
         
     </script>
         
-    <script src="http://extras.denverpost.com/foundation/js/vendor/jquery.js"></script>
+   <!-- <script src="http://extras.denverpost.com/foundation/js/vendor/jquery.js"></script>
     <script src="http://extras.denverpost.com/foundation/js/foundation.min.js"></script>
   
     <script>
-        $(document).foundation();
-    </script>
+       $(document).foundation();
+    </script> -->
 </body>
 </html>
